@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { storage } from "../firebase";
+import { db, storage } from "../firebase";
+import firebase from "firebase";
 
 function UploadImages(File) {
   const [Progress, setProgress] = useState(0);
@@ -20,6 +21,10 @@ function UploadImages(File) {
       },
       async () => {
         const url = await storageRef.getDownloadURL();
+        db.collection("Images").add({
+          url: url,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        });
         setUrl(url);
       }
     );
