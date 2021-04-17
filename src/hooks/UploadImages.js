@@ -12,8 +12,9 @@ function UploadImages(File) {
     const collectionRef = db.collection("images");
     storageRef.put(File).on(
       "state_changed",
-      (snap) => {
-        let percentage = (snap.bytesTransferred / snap.totalBytes) * 100;
+      (snapshot) => {
+        let percentage =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setProgress(percentage);
       },
       (err) => {
