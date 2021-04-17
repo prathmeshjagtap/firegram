@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { db } from "../firebase";
 
-function DisplayImage() {
+function DisplayImage({ setSelected }) {
   const [Docs, setDocs] = useState([]);
 
   useEffect(() => {
@@ -21,7 +21,11 @@ function DisplayImage() {
     <div className="img-grid">
       {Docs &&
         Docs.map((Doc) => (
-          <div className="img-wrap" key={Doc.id}>
+          <div
+            className="img-wrap"
+            key={Doc.id}
+            onClick={() => setSelected(Doc.url)}
+          >
             <img src={Doc.url} alt="Uploaded Pic" />
           </div>
         ))}

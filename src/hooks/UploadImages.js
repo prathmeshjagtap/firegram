@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { db, storage } from "../firebase";
 import firebase from "firebase";
 
@@ -9,11 +9,11 @@ function UploadImages(File) {
 
   useEffect(() => {
     const storageRef = storage.ref(File.name);
+    const collectionRef = db.collection("images");
     storageRef.put(File).on(
       "state_changed",
-      (snapshot) => {
-        let percentage =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      (snap) => {
+        let percentage = (snap.bytesTransferred / snap.totalBytes) * 100;
         setProgress(percentage);
       },
       (err) => {
@@ -21,7 +21,7 @@ function UploadImages(File) {
       },
       async () => {
         const url = await storageRef.getDownloadURL();
-        db.collection("Images").add({
+        await collectionRef.add({
           url: url,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
@@ -30,7 +30,7 @@ function UploadImages(File) {
     );
   }, [File]);
 
-  return <div>{(Progress, url, Error)}</div>;
+  return { Progress, url, Error };
 }
 
 export default UploadImages;
